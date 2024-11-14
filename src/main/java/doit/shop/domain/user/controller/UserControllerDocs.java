@@ -1,9 +1,9 @@
-package doit.shop.controller.user;
+package doit.shop.domain.user.controller;
 
-import doit.shop.controller.user.dto.UserInfoResponse;
-import doit.shop.controller.user.dto.UserLoginRequest;
-import doit.shop.controller.user.dto.UserLoginResponse;
-import doit.shop.controller.user.dto.UserSignUpRequest;
+import doit.shop.domain.user.dto.UserInfoResponse;
+import doit.shop.domain.user.dto.UserLoginRequest;
+import doit.shop.domain.user.dto.UserLoginResponse;
+import doit.shop.domain.user.dto.UserSignUpRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

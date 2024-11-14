@@ -1,10 +1,9 @@
-package doit.shop.controller.account;
+package doit.shop.domain.account.controller;
 
-import doit.shop.controller.ListWrapper;
-import doit.shop.controller.account.dto.AccountIdResponse;
-import doit.shop.controller.account.dto.AccountInfoResponse;
-import doit.shop.controller.account.dto.AccountRegisterRequest;
-import doit.shop.controller.account.dto.AccountUpdateRequest;
+import doit.shop.domain.account.dto.AccountIdResponse;
+import doit.shop.domain.account.dto.AccountInfoResponse;
+import doit.shop.domain.account.dto.AccountRegisterRequest;
+import doit.shop.domain.account.dto.AccountUpdateRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

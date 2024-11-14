@@ -1,4 +1,4 @@
-package doit.shop.controller.user.dto;
+package doit.shop.domain.user.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

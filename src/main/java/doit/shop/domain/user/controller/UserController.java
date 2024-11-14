@@ -1,9 +1,11 @@
-package doit.shop.controller.user;
+package doit.shop.domain.user.controller;
 
-import doit.shop.controller.user.dto.UserInfoResponse;
-import doit.shop.controller.user.dto.UserLoginRequest;
-import doit.shop.controller.user.dto.UserLoginResponse;
-import doit.shop.controller.user.dto.UserSignUpRequest;
+import doit.shop.domain.user.controller.UserControllerDocs;
+import doit.shop.domain.user.dto.UserInfoResponse;
+import doit.shop.domain.user.dto.UserLoginRequest;
+import doit.shop.domain.user.dto.UserLoginResponse;
+import doit.shop.domain.user.dto.UserSignUpRequest;
+import doit.shop.domain.user.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,14 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/users")
 public class UserController implements UserControllerDocs {
 
-    @PostMapping("/validate")
-    public void checkDuplicateId(@RequestParam String id) {
+    private UserService userService;
 
+    @PostMapping("")
+    public void signUp(@RequestBody UserSignUpRequest userSignUpRequest) {
     }
 
-    @PostMapping("/signup")
-    public void signUp(@RequestBody UserSignUpRequest userSignUpRequest) {
-
+    @PostMapping("/validate?id={userLoginid}")
+    public void checkDuplicateId(@RequestParam String id) {
     }
 
     @PostMapping("/login")

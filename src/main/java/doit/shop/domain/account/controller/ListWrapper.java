@@ -1,4 +1,4 @@
-package doit.shop.controller;
+package doit.shop.domain.account.controller;
 
 import java.util.List;
 
