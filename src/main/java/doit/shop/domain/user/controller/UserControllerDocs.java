@@ -23,7 +23,7 @@ interface UserControllerDocs {
     @Operation(summary = "회원가입", description = "회원가입을 한다.")
     @ApiResponse(responseCode = "200", description = "회원가입 성공")
     @ApiResponse(responseCode = "400", description = "회원가입 실패")
-    void signUp(
+    UserLoginResponse signUp(
             @Schema(description = "회원가입 정보", implementation = UserSignUpRequest.class)
             UserSignUpRequest userSignUpRequest
     );
