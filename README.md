@@ -11,3 +11,9 @@
 - Spring Boot 3.3.4
 - Spring Data JPA
 - Springdoc OpenAPI  2.0.2
+
+
+## 1.0.0
+    2024.10.09
+- 기본 로그인 구현
+- 다음 버전에 jwt 의존성 추가, jwt 생성 및 검증, jwt 반환 관련 기능 추가 예정
