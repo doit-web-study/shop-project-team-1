@@ -2,6 +2,7 @@ package doit.shop.common.jwt;
 
 import doit.shop.exception.CustomException;
 import doit.shop.exception.ErrorCode;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -41,7 +42,7 @@ public class JwtProvider {
         return Jwts.builder()
                 .claim("sub", "accessToken")
                 .claim("auth", authorities)
-                .claim("exp", new Date(now+3600000))
+                .claim("exp", new Date(now+3600000/30))
                 .claim("aud", authentication.getName())
                 .claim("iat", now)
                 .signWith(key)
@@ -85,23 +86,34 @@ public class JwtProvider {
     }
 
     public Date extractExpirationTime(String token) {
-        return Jwts.parser().verifyWith((SecretKey) key).build().parseSignedClaims(token).getPayload().getExpiration();
+        return Jwts.parser().verifyWith((SecretKey) key).build().parseSignedClaims(token).getPayload().get("exp", Date.class);
     }
 
     public Boolean isExpired(String token) {
-        return Jwts.parser().verifyWith((SecretKey) key).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        try{
+            Jwts.parser().verifyWith((SecretKey) key).build().parseSignedClaims(token).getPayload().get("exp", Date.class).before(new Date());
+            return false;
+        }catch (ExpiredJwtException e){
+            return true;
+        }
     }
 
     public String getUserId(String token) {
-        Claims claims = Jwts.parser().verifyWith((SecretKey) key).build().parseSignedClaims(token).getPayload();
-        return (String) ((LinkedHashSet<?>) claims.get("aud")).iterator().next();
+        try {
+            Claims claims = Jwts.parser().verifyWith((SecretKey) key).build().parseSignedClaims(token).getPayload();
+            return (String) ((LinkedHashSet<?>) claims.get("aud")).iterator().next();
+        }catch (ExpiredJwtException e){
+            return null;
+        }
     }
 
     public boolean isValidToken(String token, String userId){
         RefreshToken refreshToken = tokenRepository.findByLoginId(userId);
+        System.out.println("예? : "+isExpired(refreshToken.getRefreshToken()));
         if(isExpired(refreshToken.getRefreshToken())){
             throw new CustomException(ErrorCode.EXPIRED_TOKEN);
         }
+        System.out.println("expired : "+isExpired(token));
         return !isExpired(token) && getUserId(token).equals(userId);
     }
 

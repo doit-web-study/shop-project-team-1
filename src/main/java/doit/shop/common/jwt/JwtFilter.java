@@ -31,15 +31,13 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String token = jwtProvider.resolveToken(request);
-        String userId = jwtProvider.getUserId(token);
         String refreshToken = jwtProvider.resolveRefreshToken(request);
-        System.out.println("tt : "+refreshToken);
-        System.out.println("? : "+jwtProvider.isExpired(tokenRepository.findByLoginId(userId).getRefreshToken()));
+        String userId = jwtProvider.getUserId(refreshToken);
+
         if (jwtProvider.isValidToken(token, userId)){
             Authentication authentication = jwtProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else if (!jwtProvider.isExpired(tokenRepository.findByLoginId(userId).getRefreshToken())) {
-            System.out.println("this?");
             Authentication authentication = jwtProvider.getAuthentication(refreshToken);
             String accessToken = jwtProvider.generateAccessToken(authentication);
             response.setHeader("Authorization", "Bearer " + accessToken);

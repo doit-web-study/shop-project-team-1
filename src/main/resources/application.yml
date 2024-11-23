@@ -6,6 +6,10 @@ spring:
     url: jdbc:h2:mem:db;MODE=MYSQL
     username: sa
     password:
+    hikari:
+      maximum-pool-size: 10       # 최대 커넥션 풀 크기
+      minimum-idle: 2            # 최소 유휴 커넥션 수
+      connection-timeout: 20000  # 커넥션 대기 타임아웃 (밀리초)
   h2:
     console:
       enabled: true
