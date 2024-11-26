@@ -1,5 +1,6 @@
 package doit.shop.controller.user.entity;
 
+import doit.shop.controller.account.entity.AccountEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,8 +10,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @NoArgsConstructor
 @Entity
@@ -28,6 +31,9 @@ public class UserEntity implements UserDetails {
     private String phoneNumber;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AccountEntity> accountEntities = new ArrayList<>();
 
     @Builder
     public UserEntity(Long userId, String name, String loginId, String password, String nickname, String phoneNumber, LocalDateTime createdAt) {
