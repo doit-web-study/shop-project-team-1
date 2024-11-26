@@ -4,10 +4,12 @@ import doit.shop.domain.user.dto.UserInfoResponse;
 import doit.shop.domain.user.dto.UserLoginRequest;
 import doit.shop.domain.user.dto.UserLoginResponse;
 import doit.shop.domain.user.dto.UserSignUpRequest;
+import doit.shop.global.auth.dto.TokenDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 
 @Tag(name = "User", description = "유저 관련 API")
 interface UserControllerDocs {
@@ -23,7 +25,7 @@ interface UserControllerDocs {
     @Operation(summary = "회원가입", description = "회원가입을 한다.")
     @ApiResponse(responseCode = "200", description = "회원가입 성공")
     @ApiResponse(responseCode = "400", description = "회원가입 실패")
-    UserLoginResponse signUp(
+    ResponseEntity<UserLoginResponse> signUp(
             @Schema(description = "회원가입 정보", implementation = UserSignUpRequest.class)
             UserSignUpRequest userSignUpRequest
     );
@@ -31,7 +33,7 @@ interface UserControllerDocs {
     @Operation(summary = "로그인", description = "로그인을 한다.")
     @ApiResponse(responseCode = "200", description = "로그인 성공", useReturnTypeSchema = true)
     @ApiResponse(responseCode = "400", description = "로그인 실패")
-    UserLoginResponse login(
+    ResponseEntity<TokenDto> login(
             @Schema(description = "로그인 정보", implementation = UserLoginRequest.class)
             UserLoginRequest userLoginRequest
     );

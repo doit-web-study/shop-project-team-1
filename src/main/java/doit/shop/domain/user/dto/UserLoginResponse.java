@@ -7,16 +7,12 @@ import lombok.Builder;
 @Builder
 public record UserLoginResponse(
         @Schema(description = "유저 식별 ID", example = "1")
-        Long userId,
-
-        @Schema(description = "유저 이름", example = "강수빈")
-        String userName
+        Long userId
 ) {
 
         public static UserLoginResponse from(Users users) {
                 return UserLoginResponse.builder()
                         .userId(users.getId())
-                        .userName(users.getUsername())
                         .build();
         }
 }
