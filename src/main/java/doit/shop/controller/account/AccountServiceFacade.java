@@ -13,24 +13,29 @@ public class AccountServiceFacade {
 
     public void depositAccount(Long accountId, Integer amount) throws InterruptedException {
 
-        while (true) {
-            try {
-                accountService.depositAccount(accountId,amount);
-                break;
-            } catch (OptimisticLockingFailureException e) {
-                Thread.sleep(50);
-            }
-        }
+        //비관적 락
+        accountService.depositAccount(accountId,amount);
+
+        // 낙관적 락
+//        while (true) {
+//            try {
+//                accountService.depositAccount(accountId,amount);
+//                break;
+//            } catch (OptimisticLockingFailureException e) {
+//                Thread.sleep(50);
+//            }
+//        }
     }
 
     public void withdrawAccount(Long accountId, Integer amount) throws InterruptedException {
-        while (true) {
-            try {
-                accountService.withdrawAccount(accountId,amount);
-                break;
-            } catch (OptimisticLockingFailureException e) {
-                Thread.sleep(50);
-            }
-        }
+        accountService.withdrawAccount(accountId,amount);
+//        while (true) {
+//            try {
+//                accountService.withdrawAccount(accountId,amount);
+//                break;
+//            } catch (OptimisticLockingFailureException e) {
+//                Thread.sleep(50);
+//            }
+//        }
     }
 }

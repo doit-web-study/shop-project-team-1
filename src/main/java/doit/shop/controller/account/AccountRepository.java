@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountRepository extends JpaRepository<AccountEntity,Long> {
 
-    @Lock(LockModeType.OPTIMISTIC)
+//    @Lock(LockModeType.OPTIMISTIC)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select a from AccountEntity a where a.accountId = :accountId")
     AccountEntity findByAccountId(Long accountId);
 }

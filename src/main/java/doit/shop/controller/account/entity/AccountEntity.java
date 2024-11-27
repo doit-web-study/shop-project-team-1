@@ -28,8 +28,9 @@ public class AccountEntity {
     @JoinColumn(name = "userId", referencedColumnName = "userId", insertable = false, updatable = false)
     Long userId;
 
-    @Version
-    private Long version;
+    // 낙관적 락
+//    @Version
+//    private Long version;
 
     @Builder
     public AccountEntity(String accountName, String accountNumber, String accountBankName, Long userId) {
