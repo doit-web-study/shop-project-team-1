@@ -46,7 +46,7 @@ public class AccountController implements AccountControllerDocs {
     }
 
     @PostMapping("/{accountId}/deposit")
-    public void depositAccount(@PathVariable Long accountId, @RequestParam Integer amount) {
+    public void depositAccount(@PathVariable Long accountId, @RequestParam Integer amount) throws InterruptedException {
         accountService.depositAccount(accountId,amount);
     }
 

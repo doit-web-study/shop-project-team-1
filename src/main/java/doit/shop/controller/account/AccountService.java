@@ -11,18 +11,22 @@ import doit.shop.controller.user.UserRepository;
 import doit.shop.controller.user.entity.UserEntity;
 import doit.shop.exception.CustomException;
 import doit.shop.exception.ErrorCode;
+import lombok.RequiredArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AccountService {
     private JwtProvider jwtProvider;
-    private UserRepository userRepository;
-    private AccountRepository accountRepository;
+    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
     @Transactional
     public AccountIdResponse registerAccount(AccountRegisterRequest request) {
@@ -36,6 +40,7 @@ public class AccountService {
                 .userId(user.getUserId())
                 .build();
 
+        accountRepository.save(account);
         return new AccountIdResponse(account.getAccountId());
     }
     public ListWrapper<AccountInfoResponse> getAccountList() {
@@ -68,11 +73,14 @@ public class AccountService {
     }
 
     @Transactional
-    public void depositAccount(Long accountId, Integer amount) {
+    public void depositAccount(Long accountId, Integer amount) throws InterruptedException {
+
         AccountEntity account = accountRepository.findByAccountId(accountId);
-        if(account==null){
+
+        if (account == null) {
             throw new CustomException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
+
         account.deposit(amount);
     }
 
