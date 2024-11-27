@@ -8,6 +8,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+
+import javax.security.auth.login.AccountNotFoundException;
+import java.util.Map;
 
 @Tag(name = "Account", description = "계좌 관리 API")
 public interface AccountControllerDocs {
@@ -46,7 +50,7 @@ public interface AccountControllerDocs {
     @Operation(summary = "계좌에 입금", description = "계좌에 일정 금액을 입금한다.")
     @ApiResponse(responseCode = "200", description = "계좌 입금 성공")
     @ApiResponse(responseCode = "400", description = "계좌 입금 실패")
-    void depositAccount(
+    ResponseEntity<Map<String, String>> depositAccount (
             @Schema(description = "계좌 식별 ID", example = "1")
             Long accountId,
             @Schema(description = "입금 금액", example = "10000")

@@ -36,6 +36,7 @@ public class SecurityConfig {
             "/api/users/login",
             "/api/users/validate",
             "/h2-console/**",
+            "/**"
     };
 
     @Bean
