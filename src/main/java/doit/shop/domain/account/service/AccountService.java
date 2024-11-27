@@ -21,4 +21,12 @@ public class AccountService {
         account.setAccountBalance(account.getAccountBalance() + amount);
         accountRepository.save(account);
     }
+
+    @Transactional
+    public void withdraw(Long accountId, Integer amount) throws AccountNotFoundException{
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException("[accountId: " + accountId + "] 는 찾을 수 없음"));
+        account.setAccountBalance(account.getAccountBalance() - amount);
+        accountRepository.save(account);
+    }
 }

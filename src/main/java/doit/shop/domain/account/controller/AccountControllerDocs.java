@@ -60,7 +60,7 @@ public interface AccountControllerDocs {
     @Operation(summary = "계좌에서 출금", description = "계좌에서 일정 금액을 출금한다.")
     @ApiResponse(responseCode = "200", description = "계좌 출금 성공")
     @ApiResponse(responseCode = "400", description = "계좌 출금 실패")
-    void withdrawAccount(
+    ResponseEntity<Map<String, String>> withdrawAccount(
             @Schema(description = "계좌 식별 ID", example = "1")
             Long accountId,
             @Schema(description = "출금 금액", example = "10000")

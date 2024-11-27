@@ -64,7 +64,14 @@ public class AccountController implements AccountControllerDocs {
     }
 
     @PostMapping("/{accountId}/withdraw")
-    public void withdrawAccount(@PathVariable Long accountId, @RequestParam Integer amount) {
-
+    public ResponseEntity<Map<String, String>> withdrawAccount(@PathVariable Long accountId, @RequestParam Integer amount) {
+        try {
+            accountService.withdraw(accountId, amount);
+            return ResponseEntity.ok().build();
+        } catch (AccountNotFoundException ex) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 }
