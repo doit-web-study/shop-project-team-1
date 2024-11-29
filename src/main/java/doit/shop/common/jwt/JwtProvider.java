@@ -42,7 +42,7 @@ public class JwtProvider {
         return Jwts.builder()
                 .claim("sub", "accessToken")
                 .claim("auth", authorities)
-                .claim("exp", new Date(now+3600000/30))
+                .claim("exp", new Date(now+3600000))
                 .claim("aud", authentication.getName())
                 .claim("iat", now)
                 .signWith(key)
@@ -109,11 +109,9 @@ public class JwtProvider {
 
     public boolean isValidToken(String token, String userId){
         RefreshToken refreshToken = tokenRepository.findByLoginId(userId);
-        System.out.println("예? : "+isExpired(refreshToken.getRefreshToken()));
         if(isExpired(refreshToken.getRefreshToken())){
             throw new CustomException(ErrorCode.EXPIRED_TOKEN);
         }
-        System.out.println("expired : "+isExpired(token));
         return !isExpired(token) && getUserId(token).equals(userId);
     }
 
