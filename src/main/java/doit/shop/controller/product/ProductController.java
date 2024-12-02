@@ -24,12 +24,13 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getProducts(
+    public ResponseEntity<PagedProductResponse> getProducts(
             @RequestParam int pageNumber,
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) Long categoryId
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(defaultValue = "latest") String orderBy
     ) {
-        PagedProductResponse response = productService.getProducts(pageNumber, keyword, categoryId);
+        PagedProductResponse response = productService.getProducts(pageNumber, keyword, categoryId, orderBy);
         return ResponseEntity.ok(response);
     }
 }

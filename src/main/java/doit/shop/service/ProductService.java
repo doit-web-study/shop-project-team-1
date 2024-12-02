@@ -29,8 +29,6 @@ public class ProductService {
         Category category = categoryRepository.findById(productRequest.categoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
 
-        System.out.println(productRequest);
-        System.out.println(productImage);
         String imageUrl = null;
         if (productImage != null && !productImage.isEmpty()) {
             imageUrl = productImage; // Placeholder for image saving logic
@@ -49,13 +47,21 @@ public class ProductService {
         return new ProductResponse(savedProduct.getId());
     }
 
-    public PagedProductResponse getProducts(int pageNumber, String keyword, Long categoryId) {
-        PageRequest pageRequest = PageRequest.of(pageNumber, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
+    public PagedProductResponse getProducts(int pageNumber, String keyword, Long categoryId, String orderBy) {
+        // 정렬 기준 설정
+        Sort sort = "views".equalsIgnoreCase(orderBy)
+                ? Sort.by(Sort.Direction.DESC, "views")
+                : Sort.by(Sort.Direction.DESC, "createdAt");
 
+        // 페이징 설정
+        PageRequest pageRequest = PageRequest.of(pageNumber, 10, sort);
+
+        // 검색 및 필터링
         Page<Product> productPage = categoryId != null
-                ? productRepository.findByCategoryId(categoryId, pageRequest)
-                : productRepository.findAll(pageRequest);
+                ? productRepository.findByCategoryIdAndKeyword(categoryId, keyword, pageRequest)
+                : productRepository.findByKeyword(keyword, pageRequest);
 
+        // DTO로 변환
         List<ProductListResponse> products = productPage.stream()
                 .map(product -> new ProductListResponse(
                         product.getId(),
@@ -68,7 +74,6 @@ public class ProductService {
                         product.getUpdatedAt(),
                         product.getCategory().getId(),
                         product.getCategory().getCategoryType().name()
-
                 ))
                 .collect(Collectors.toList());
 
