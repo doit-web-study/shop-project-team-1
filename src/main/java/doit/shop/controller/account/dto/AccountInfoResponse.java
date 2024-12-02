@@ -1,5 +1,6 @@
 package doit.shop.controller.account.dto;
 
+import doit.shop.domain.Account;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record AccountInfoResponse (
@@ -18,4 +19,13 @@ public record AccountInfoResponse (
         @Schema(description = "계좌 잔액", example = "100000")
         Integer accountBalance
 ){
+        public static AccountInfoResponse fromEntity(Account account) {
+                return new AccountInfoResponse(
+                        account.getId(),
+                        account.getAccountName(),
+                        account.getAccountNumber(),
+                        account.getAccountBankName(),
+                        account.getAccountBalance()
+                );
+        }
 }

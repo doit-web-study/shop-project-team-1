@@ -3,29 +3,23 @@ package doit.shop.controller.user.dto;
 import doit.shop.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public record UserInfoResponse(
-        @Schema(description = "유저 식별 ID", example = "1")
-        Long userId,
-
+public record UserRegisterRequest(
         @Schema(description = "로그인 아이디", example = "testId")
         String userLoginId,
+
+        @Schema(description = "로그인 비밀번호", example = "1234")
+        String userPassword,
 
         @Schema(description = "이름", example = "홍길동")
         String userName,
 
         @Schema(description = "닉네임", example = "각시탈")
-        String userNickName,
+        String userNickname,
 
         @Schema(description = "전화번호", example = "010-1234-5678")
         String userPhoneNumber
 ) {
-        public static UserInfoResponse from(User user) {
-                return new UserInfoResponse(
-                        user.getId(),
-                        user.getUserLoginId(),
-                        user.getUserName(),
-                        user.getUserNickname(),
-                        user.getUserPhoneNumber()
-                );
+        public User toUser(){
+                return User.createUser(userLoginId, userPassword, userName, userNickname, userPhoneNumber);
         }
 }
