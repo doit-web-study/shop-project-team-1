@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+// TEST는 아직 안해본 로직
 public class CustomUserDetails implements UserDetails {
 
     private final String username;

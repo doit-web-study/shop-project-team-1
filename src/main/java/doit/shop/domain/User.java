@@ -3,6 +3,9 @@ package doit.shop.domain;
 import jakarta.persistence.*;
         import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -27,6 +30,9 @@ public class User extends BaseEntity {
     private String userNickname;
 
     private String userPhoneNumber;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Account> accounts = new ArrayList<>();
 
     public static User createUser(String userLoginId,
                                   String userPassword,

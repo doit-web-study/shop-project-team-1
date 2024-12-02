@@ -26,6 +26,10 @@ public class Account extends BaseEntity {
     @Column(nullable = false)
     private Integer accountBalance;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     private Account(Builder builder) {
         this.id = builder.id;
         this.accountName = builder.accountName;

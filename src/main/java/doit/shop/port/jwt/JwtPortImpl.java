@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
+// TEST는 아직 안해본 로직
 @Component
 public class JwtPortImpl implements JwtPort{
     private final JwtConfig jwtProperties;
