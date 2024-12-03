@@ -58,6 +58,11 @@ public class UserController implements UserControllerDocs {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @PostMapping("/test")
+    public String test() {
+        return "success";
+    }
+
     // 본인 프로필 불러오기
     @GetMapping("/info")
     public UserInfoResponse getUserInfo(@PathVariable Long userId) {

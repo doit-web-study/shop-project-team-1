@@ -16,7 +16,7 @@ public class AccountService {
 
     @Transactional
     public void deposit(Long accountId, Integer amount) throws AccountNotFoundException{
-        Account account = accountRepository.findById(accountId)
+        Account account = accountRepository.findByIdWithLock(accountId)
                         .orElseThrow(() -> new AccountNotFoundException("[accountId: " + accountId + "] 는 찾을 수 없음"));
         account.setAccountBalance(account.getAccountBalance() + amount);
         accountRepository.save(account);
@@ -24,7 +24,7 @@ public class AccountService {
 
     @Transactional
     public void withdraw(Long accountId, Integer amount) throws AccountNotFoundException{
-        Account account = accountRepository.findById(accountId)
+        Account account = accountRepository.findByIdWithLock(accountId)
                 .orElseThrow(() -> new AccountNotFoundException("[accountId: " + accountId + "] 는 찾을 수 없음"));
         account.setAccountBalance(account.getAccountBalance() - amount);
         accountRepository.save(account);
