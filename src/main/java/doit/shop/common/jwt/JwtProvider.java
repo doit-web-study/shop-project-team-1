@@ -9,6 +9,7 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,7 +27,7 @@ import java.util.LinkedHashSet;
 @Component
 public class JwtProvider {
 
-    private Key key;
+    private final Key key;
     private final RefreshTokenRepository tokenRepository;
 
     public JwtProvider(@Value("${jwt.secret.key}") String secretKey, RefreshTokenRepository tokenRepository){
