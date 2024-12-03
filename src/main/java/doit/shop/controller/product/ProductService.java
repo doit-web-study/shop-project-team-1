@@ -27,7 +27,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
-    private JwtProvider jwtProvider;
+    private final JwtProvider jwtProvider;
 
     public ListWrapper<CategoryResponse> getCategories() {
         List<Category> categories = categoryRepository.findAll();
@@ -41,10 +41,11 @@ public class ProductService {
     public ProductResponse uploadProduct(ProductUploadRequest request, HttpServletRequest httpRequest) {
 
         String accessToken = jwtProvider.resolveToken(httpRequest);
-        String userId = jwtProvider.getUserId(accessToken);
-        UserEntity user = userRepository.findByLoginId(userId);
+        String userLoginId = jwtProvider.getUserId(accessToken);
+        UserEntity user = userRepository.findByLoginId(userLoginId);
 
-        if(!jwtProvider.isValidToken(accessToken,userId))
+
+        if(!jwtProvider.isValidToken(accessToken,userLoginId))
             throw new CustomException(ErrorCode.NO_TOKEN_EXIST);
 
         Product product = Product.builder()

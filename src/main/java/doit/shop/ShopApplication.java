@@ -12,11 +12,6 @@ public class ShopApplication {
 
     public static void main(String[] args) {
 
-        try {
-            ApplicationContext context = SpringApplication.run(ShopApplication.class, args);
-            System.out.println("Loaded beans: " + Arrays.toString(context.getBeanDefinitionNames()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        SpringApplication.run(ShopApplication.class, args);
     }
 }

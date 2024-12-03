@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@EnableJpaRepositories("doit.shop.controller.product.repository")
 public class QuerydslConfig {
 
     @PersistenceContext
