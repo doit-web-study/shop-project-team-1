@@ -3,6 +3,11 @@ spring:
     name: shop
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
   h2:
     console:
       enabled: true
@@ -11,3 +16,5 @@ spring:
 jwt:
   secret: 41e358af6df4857fee14557a6ec66ddbf09a320b4ec67f4981c484f070dceb22390904895cc1543d0d1e7a5a2e6c1047c553cafc34f056eb07ead665ee795873
 
+logging.level.org.hibernate.SQL: DEBUG
+logging.level.org.hibernate.type.descriptor.sql: TRACE
