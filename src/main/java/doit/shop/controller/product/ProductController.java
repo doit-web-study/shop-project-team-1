@@ -36,8 +36,8 @@ public class ProductController {
         productService.delete(id, httpRequest);
     }
 
-    @GetMapping("/")
-    public Page<Product> getMultiProducts(Pageable pageable, @RequestParam String keyword, @RequestParam Long categoryId){
+    @GetMapping
+    public Page<ProductInfoResponse> getMultiProducts(Pageable pageable, @RequestParam String keyword, @RequestParam Long categoryId){
         return productService.getMultiProducts(pageable,keyword,categoryId);
     }
 

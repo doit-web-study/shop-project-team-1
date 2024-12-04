@@ -109,13 +109,17 @@ public class UserService {
 
     @Transactional
     public void deleteUser(HttpServletRequest request){
-        String accessToken = jwtProvider.resolveToken(request);
-        String userId = jwtProvider.getUserId(accessToken);
 
-        if(jwtProvider.isValidToken(accessToken, userId)){
-            UserEntity user = userRepository.findByLoginId(userId);
-            userRepository.delete(user);
-            jwtProvider.disableToken(accessToken);
-        }
+            System.out.println("request : " + request);
+            String accessToken = jwtProvider.resolveToken(request);
+            String userId = jwtProvider.getUserId(accessToken);
+
+            if (jwtProvider.isValidToken(accessToken, userId)) {
+                UserEntity user = userRepository.findByLoginId(userId);
+                System.out.println("user : " + user.getUserId());
+                userRepository.deleteById(user.getUserId());
+                System.out.println("token : " + accessToken);
+                jwtProvider.disableToken(userId);
+            }
     }
 }

@@ -80,8 +80,8 @@ public class JwtProvider {
                 .compact();
     }
 
-    public void disableToken(String token){
-        RefreshToken toDelete = tokenRepository.findByRefreshToken(token);
+    public void disableToken(String loginId){
+        RefreshToken toDelete = tokenRepository.findByLoginId(loginId);
         tokenRepository.delete(toDelete);
     }
 

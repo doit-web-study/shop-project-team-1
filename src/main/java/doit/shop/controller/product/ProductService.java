@@ -94,14 +94,33 @@ public class ProductService {
         return product;
     }
 
-    public Page<Product> getMultiProducts(Pageable pageable, String keyword, Long categoryId) {
-
-        if(categoryId!=null) {
-            return productRepository.searchKeywordByCategoryId(pageable, keyword, categoryId);
+    public Page<ProductInfoResponse> getMultiProducts(Pageable pageable, String keyword, Long categoryId) {
+        System.out.println("되는겨??");
+        Page<ProductInfoResponse> products;
+        if (categoryId != null) {
+            System.out.println("되는겨??1");
+            products = productRepository.searchKeywordByCategoryId(pageable, keyword, categoryId);
+            System.out.println("product1 : " + products);
         } else {
-            return productRepository.searchKeyword(pageable, keyword);
+            System.out.println("되는겨??2");
+            products = productRepository.searchKeyword(pageable, keyword);
+            System.out.println("product2 : " + products);
         }
 
+        return products.map(product -> ProductInfoResponse.builder()
+                .productId(product.getProductId())
+                .productDescription(product.getDescription())
+                .productName(product.getName())
+                .productStock(product.getStock())
+                .productImage(product.getImage())
+                .productPrice(product.getPrice())
+                .categoryId(product.getCategoryId())
+                .categoryType(product.getCategoryType())
+                .createdAt(product.getCreatedAt())
+                .modifiedAt(product.getModifiedAt())
+                .userNickname(user.getNickname())
+                .userId(user.getUserId())
+                .build())
     }
 
     public ProductInfoResponse getProduct(Long categoryId) {
