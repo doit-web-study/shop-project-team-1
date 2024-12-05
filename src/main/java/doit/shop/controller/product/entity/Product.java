@@ -24,10 +24,10 @@ public class Product {
     private LocalDateTime modifiedAt;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "categoryId", insertable = false, updatable = false)
+//    @JoinColumn(name = "category_id", referencedColumnName = "categoryId", insertable = false, updatable = false)
     Category category;
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "userId", insertable = false, updatable = false)
+//    @JoinColumn(name = "user_id", referencedColumnName = "userId", insertable = false, updatable = false)
     UserEntity user;
 
     @Builder

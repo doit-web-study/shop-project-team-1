@@ -25,7 +25,7 @@ public class AccountEntity {
     private LocalDateTime modifiedAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "userId", insertable = false, updatable = false)
+//    @JoinColumn(name = "user_id", referencedColumnName = "userId", insertable = false, updatable = false)
     UserEntity user;
 
     // 낙관적 락

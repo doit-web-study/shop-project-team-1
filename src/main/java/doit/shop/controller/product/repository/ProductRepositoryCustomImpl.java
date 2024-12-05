@@ -62,7 +62,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     @Override
     public Page<ProductInfoResponse> searchKeywordByCategoryId(Pageable pageable, String keyword, Long categoryId) {
 
-        System.out.println("Keyword: " + keyword);
+        System.out.println("Keyword: [" + keyword);
         System.out.println("CategoryId: " + categoryId);
 
         List<ProductInfoResponse> products = queryFactory.select(Projections.constructor(
@@ -99,8 +99,8 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
 
         List<ProductResponse> test = queryFactory.select(Projections.constructor(ProductResponse.class, product.productId))
                 .from(product)
-//                .leftJoin(category).on(product.category.categoryId.eq(category.categoryId))
-                .where(product.description.contains(keyword))
+                .leftJoin(category).on(product.category.categoryId.eq(category.categoryId))
+                .where(product.description.contains("s"))
                 .fetch();
         System.out.println("test : "+test);
 
