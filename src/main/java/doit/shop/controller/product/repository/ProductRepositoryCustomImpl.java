@@ -2,8 +2,6 @@ package doit.shop.controller.product.repository;
 
 import com.querydsl.core.types.Projections;
 import doit.shop.controller.product.dto.ProductInfoResponse;
-import doit.shop.controller.product.dto.ProductResponse;
-import doit.shop.controller.product.entity.Product;
 import doit.shop.exception.CustomException;
 import doit.shop.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
