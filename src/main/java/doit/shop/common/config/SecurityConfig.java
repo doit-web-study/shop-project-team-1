@@ -1,10 +1,8 @@
 package doit.shop.common.config;
 
-//import doit.shop.common.jwt.LoginFilter;
 import doit.shop.common.jwt.JwtFilter;
 import doit.shop.common.jwt.JwtProvider;
 import doit.shop.common.jwt.RefreshTokenRepository;
-import doit.shop.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

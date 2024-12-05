@@ -26,7 +26,7 @@ import java.util.LinkedHashSet;
 @Component
 public class JwtProvider {
 
-    private Key key;
+    private final Key key;
     private final RefreshTokenRepository tokenRepository;
 
     public JwtProvider(@Value("${jwt.secret.key}") String secretKey, RefreshTokenRepository tokenRepository){
@@ -80,8 +80,8 @@ public class JwtProvider {
                 .compact();
     }
 
-    public void disableToken(String token){
-        RefreshToken toDelete = tokenRepository.findByRefreshToken(token);
+    public void disableToken(String loginId){
+        RefreshToken toDelete = tokenRepository.findByLoginId(loginId);
         tokenRepository.delete(toDelete);
     }
 
