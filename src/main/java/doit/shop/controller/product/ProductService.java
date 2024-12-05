@@ -98,16 +98,11 @@ public class ProductService {
     }
 
     public Page<ProductInfoResponse> getMultiProducts(Pageable pageable, String keyword, Long categoryId) {
-        System.out.println("되는겨??");
         Page<ProductInfoResponse> products;
         if (categoryId != null) {
-            System.out.println("되는겨??1");
             products = productRepository.searchKeywordByCategoryId(pageable, keyword, categoryId);
-            System.out.println("product1 : " + products);
         } else {
-            System.out.println("되는겨??2");
             products = productRepository.searchKeyword(pageable, keyword);
-            System.out.println("product2 : " + products);
         }
 
         return products;

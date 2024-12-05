@@ -17,6 +17,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(404002, "해당하는 유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     ACCOUNT_NOT_FOUND(404003, "해당하는 계좌를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     CATEGORY_NOT_FOUND(404004, "해당 카테고리를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    QUERY_NOT_FOUND(404005, "해당 쿼리 결과가 없습니다.", HttpStatus.NOT_FOUND),
 
 
     EXPIRED_TOKEN(401001, "토큰이 만료되었습니다.", HttpStatus.UNAUTHORIZED),

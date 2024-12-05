@@ -1,8 +1,10 @@
 package doit.shop.controller.product.dto;
 
 import doit.shop.controller.product.entity.CategoryType;
+import lombok.Getter;
 
 
+@Getter
 public class CategoryResponse {
 
     public CategoryResponse(Long categoryId, CategoryType categoryType) {

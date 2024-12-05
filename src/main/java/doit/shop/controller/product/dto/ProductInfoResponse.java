@@ -3,11 +3,13 @@ package doit.shop.controller.product.dto;
 import doit.shop.controller.product.entity.CategoryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Builder
+@Getter
 public class ProductInfoResponse {
 
     private Long productId;

@@ -4,6 +4,8 @@ import com.querydsl.core.types.Projections;
 import doit.shop.controller.product.dto.ProductInfoResponse;
 import doit.shop.controller.product.dto.ProductResponse;
 import doit.shop.controller.product.entity.Product;
+import doit.shop.exception.CustomException;
+import doit.shop.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -56,14 +58,15 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
                 .where(product.description.contains(keyword))
                 .fetchOne();
 
+        if (products.isEmpty()) {
+            throw new CustomException(ErrorCode.QUERY_NOT_FOUND);
+        }
+
         return new PageImpl<>(products, pageable, total);
     }
 
     @Override
     public Page<ProductInfoResponse> searchKeywordByCategoryId(Pageable pageable, String keyword, Long categoryId) {
-
-        System.out.println("Keyword: [" + keyword);
-        System.out.println("CategoryId: " + categoryId);
 
         List<ProductInfoResponse> products = queryFactory.select(Projections.constructor(
                 ProductInfoResponse.class,
@@ -97,17 +100,8 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
             .where(product.description.contains(keyword), product.category.categoryId.eq(categoryId))
             .fetchOne();
 
-        List<ProductResponse> test = queryFactory.select(Projections.constructor(ProductResponse.class, product.productId))
-                .from(product)
-                .leftJoin(category).on(product.category.categoryId.eq(category.categoryId))
-                .where(product.description.contains("s"))
-                .fetch();
-        System.out.println("test : "+test);
-
         if (products.isEmpty()) {
-            System.out.println("No results found for the given keyword and categoryId.");
-        } else {
-            System.out.println("Results: " + products);
+            throw new CustomException(ErrorCode.QUERY_NOT_FOUND);
         }
 
         return new PageImpl<>(products, pageable, total);
