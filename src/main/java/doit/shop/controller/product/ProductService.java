@@ -48,14 +48,16 @@ public class ProductService {
         if(!jwtProvider.isValidToken(accessToken,userLoginId))
             throw new CustomException(ErrorCode.NO_TOKEN_EXIST);
 
+        Category category = categoryRepository.findByCategoryId(request.getCategoryId());
+
         Product product = Product.builder()
                 .name(request.getProductName())
                 .description(request.getProductDescription())
                 .price(request.getProductPrice())
                 .stock(request.getProductStock())
                 .image(request.getProductImage())
-                .categoryId(request.getCategoryId())
-                .userId(user.getUserId())
+                .category(category)
+                .user(user)
                 .build();
 
         productRepository.save(product);
@@ -67,7 +69,8 @@ public class ProductService {
 
         Product product = checkUserAndProduct(productId, httpRequest);
 
-        product.updateProduct(request.getProductName(),request.getProductDescription(),request.getProductPrice(),request.getProductStock(),request.getProductImage(),request.getCategoryId());
+        Category category = categoryRepository.findByCategoryId(request.getCategoryId());
+        product.updateProduct(request.getProductName(),request.getProductDescription(),request.getProductPrice(),request.getProductStock(),request.getProductImage(),category);
         productRepository.save(product);
 
         return new ProductResponse(product.getProductId());
@@ -88,7 +91,7 @@ public class ProductService {
         if(product==null)
             throw new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
 
-        if(!user.getUserId().equals(product.getUserId()))
+        if(!user.getUserId().equals(product.getUser().getUserId()))
             throw new CustomException(ErrorCode.NOT_UPLOADER);
 
         return product;
@@ -111,15 +114,16 @@ public class ProductService {
     }
 
     public ProductInfoResponse getProduct(Long categoryId) {
-        Product product = productRepository.findByCategoryId(categoryId);
-        if(product==null)
-            throw new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
 
         Category category = categoryRepository.findByCategoryId(categoryId);
         if(category==null)
             throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
 
-        UserEntity user = userRepository.findByUserId(product.getUserId());
+        Product product = productRepository.findByCategory(category);
+        if(product==null)
+            throw new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
+
+        UserEntity user = userRepository.findByUserId(product.getUser().getUserId());
         if(user==null)
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
 
@@ -130,7 +134,7 @@ public class ProductService {
                 .productStock(product.getStock())
                 .productImage(product.getImage())
                 .productPrice(product.getPrice())
-                .categoryId(product.getCategoryId())
+                .categoryId(product.getCategory().getCategoryId())
                 .categoryType(category.getCategoryType())
                 .createdAt(product.getCreatedAt())
                 .modifiedAt(product.getModifiedAt())

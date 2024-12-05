@@ -33,10 +33,10 @@ public class UserEntity implements UserDetails {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AccountEntity> accountEntities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
 
     @Builder

@@ -2,6 +2,7 @@ package doit.shop.controller.product.repository;
 
 import com.querydsl.core.types.Projections;
 import doit.shop.controller.product.dto.ProductInfoResponse;
+import doit.shop.controller.product.dto.ProductResponse;
 import doit.shop.controller.product.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,29 +28,31 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
 
         List<ProductInfoResponse> products = queryFactory
                 .select(Projections.constructor(
-                        ProductInfoResponse.class,
-                        product.productId,
-                        product.name,
-                        product.description,
-                        product.price,
-                        product.stock,
-                        product.image,
-                        product.createdAt,
-                        product.modifiedAt,
-                        product.categoryId,
-                        category.categoryType,
-                        userEntity.userId,
-                        userEntity.nickname
+                    ProductInfoResponse.class,
+                    product.productId,
+                    product.name,
+                    product.description,
+                    product.price,
+                    product.stock,
+                    product.image,
+                    product.createdAt,
+                    product.modifiedAt,
+                    product.category.categoryId,
+                    category.categoryType,
+                    userEntity.userId,
+                    userEntity.nickname
                 ))
                 .from(product)
                 .where(product.description.contains(keyword))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(product.modifiedAt.asc())
+                .orderBy(product.modifiedAt.asc(), product.createdAt.asc())
                 .fetch();
 
         Long total = queryFactory.select(product.count())
                 .from(product)
+                .leftJoin(category).on(product.category.categoryId.eq(category.categoryId))
+                .leftJoin(userEntity).on(product.user.userId.eq(userEntity.userId))
                 .where(product.description.contains(keyword))
                 .fetchOne();
 
@@ -59,34 +62,53 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     @Override
     public Page<ProductInfoResponse> searchKeywordByCategoryId(Pageable pageable, String keyword, Long categoryId) {
 
-        List<ProductInfoResponse> products = queryFactory.select(Projections.constructor(
-                        ProductInfoResponse.class,
-                        product.productId,
-                        product.name,
-                        product.description,
-                        product.price,
-                        product.stock,
-                        product.image,
-                        product.createdAt,
-                        product.modifiedAt,
-                        product.categoryId,
-                        category.categoryType,
-                        userEntity.userId,
-                        userEntity.nickname
-                ))
-                .from(product)
-                .leftJoin(category).on(product.categoryId.eq(category.categoryId))
-                .leftJoin(userEntity).on(product.userId.eq(userEntity.userId))
-                .where(product.description.contains(keyword), product.categoryId.eq(categoryId))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(product.modifiedAt.asc())
-                .fetch();
+        System.out.println("Keyword: " + keyword);
+        System.out.println("CategoryId: " + categoryId);
 
-        Long total = queryFactory.select(product.count())
+        List<ProductInfoResponse> products = queryFactory.select(Projections.constructor(
+                ProductInfoResponse.class,
+                product.productId,
+                product.name,
+                product.description,
+                product.price,
+                product.stock,
+                product.image,
+                product.createdAt,
+                product.modifiedAt,
+                product.category.categoryId,
+                category.categoryType,
+                userEntity.userId,
+                userEntity.nickname
+            ))
+            .from(product)
+            .leftJoin(category).on(product.category.categoryId.eq(category.categoryId))
+            .leftJoin(userEntity).on(product.user.userId.eq(userEntity.userId))
+            .where(product.description.contains(keyword), product.category.categoryId.eq(categoryId))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .orderBy(product.modifiedAt.asc(), product.createdAt.asc())
+            .fetch();
+
+        Long total = queryFactory
+            .select(product.count())
+            .from(product)
+            .leftJoin(category).on(product.category.categoryId.eq(category.categoryId))
+            .leftJoin(userEntity).on(product.user.userId.eq(userEntity.userId))
+            .where(product.description.contains(keyword), product.category.categoryId.eq(categoryId))
+            .fetchOne();
+
+        List<ProductResponse> test = queryFactory.select(Projections.constructor(ProductResponse.class, product.productId))
                 .from(product)
-                .where(product.description.contains(keyword), product.categoryId.eq(categoryId))
-                .fetchOne();
+//                .leftJoin(category).on(product.category.categoryId.eq(category.categoryId))
+                .where(product.description.contains(keyword))
+                .fetch();
+        System.out.println("test : "+test);
+
+        if (products.isEmpty()) {
+            System.out.println("No results found for the given keyword and categoryId.");
+        } else {
+            System.out.println("Results: " + products);
+        }
 
         return new PageImpl<>(products, pageable, total);
     }

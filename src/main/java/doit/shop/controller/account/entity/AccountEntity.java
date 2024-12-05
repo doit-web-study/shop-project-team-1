@@ -1,12 +1,10 @@
 package doit.shop.controller.account.entity;
 
-import doit.shop.controller.account.dto.AccountUpdateRequest;
 import doit.shop.controller.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.dao.OptimisticLockingFailureException;
 
 import java.time.LocalDateTime;
 
@@ -25,21 +23,23 @@ public class AccountEntity {
     private Integer accountBalance;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    @JoinColumn(name = "userId", referencedColumnName = "userId", insertable = false, updatable = false)
-    Long userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "userId", insertable = false, updatable = false)
+    UserEntity user;
 
     // 낙관적 락
 //    @Version
 //    private Long version;
 
     @Builder
-    public AccountEntity(String accountName, String accountNumber, String accountBankName, Long userId) {
+    public AccountEntity(String accountName, String accountNumber, String accountBankName, UserEntity userId) {
         this.accountName = accountName;
         this.accountNumber = accountNumber;
         this.accountBankName = accountBankName;
         this.accountBalance = 0;
         this.createdAt = LocalDateTime.now();
-        this.userId = userId;
+        this.user = user;
     }
 
     public void updateName(String accountName) {

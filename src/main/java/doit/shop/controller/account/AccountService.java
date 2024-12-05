@@ -37,7 +37,7 @@ public class AccountService {
                 .accountBankName(request.accountBankName())
                 .accountNumber(request.accountNumber())
                 .accountName(request.accountName())
-                .userId(user.getUserId())
+                .userId(user)
                 .build();
 
         accountRepository.save(account);

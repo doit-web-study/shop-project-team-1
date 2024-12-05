@@ -1,5 +1,6 @@
 package doit.shop.controller.product.entity;
 
+import doit.shop.controller.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,24 +23,26 @@ public class Product {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    @JoinColumn(name = "categoryId", referencedColumnName = "categoryId", insertable = false, updatable = false)
-    Long categoryId;
-    @JoinColumn(name = "userId", referencedColumnName = "userId", insertable = false, updatable = false)
-    Long userId;
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "categoryId", insertable = false, updatable = false)
+    Category category;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "userId", insertable = false, updatable = false)
+    UserEntity user;
 
     @Builder
-    public Product(String name, String description, String image, Integer price, Integer stock, Long categoryId, Long userId) {
+    public Product(String name, String description, String image, Integer price, Integer stock, Category category, UserEntity user) {
         this.name = name;
         this.description = description;
         this.image = image;
         this.price = price;
         this.stock = stock;
-        this.categoryId = categoryId;
+        this.category = category;
         this.createdAt = LocalDateTime.now();
-        this.userId = userId;
+        this.user = user;
     }
 
-    public void updateProduct(String name, String description, Integer price, Integer stock, String image, Long categoryId) {
+    public void updateProduct(String name, String description, Integer price, Integer stock, String image, Category category) {
         if (name!=null)
             this.name = name;
         if (description!=null)
@@ -50,8 +53,8 @@ public class Product {
             this.price = price;
         if (stock!=null)
             this.stock = stock;
-        if(categoryId!=null)
-            this.categoryId = categoryId;
+        if(category!=null)
+            this.category = category;
         this.modifiedAt = LocalDateTime.now();
     }
 }

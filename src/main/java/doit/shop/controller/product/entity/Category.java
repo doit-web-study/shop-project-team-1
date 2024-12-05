@@ -18,6 +18,6 @@ public class Category {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    @OneToMany(mappedBy = "categoryId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
 }
