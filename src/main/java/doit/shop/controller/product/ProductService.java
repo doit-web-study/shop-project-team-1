@@ -107,20 +107,7 @@ public class ProductService {
             System.out.println("product2 : " + products);
         }
 
-        return products.map(product -> ProductInfoResponse.builder()
-                .productId(product.getProductId())
-                .productDescription(product.getDescription())
-                .productName(product.getName())
-                .productStock(product.getStock())
-                .productImage(product.getImage())
-                .productPrice(product.getPrice())
-                .categoryId(product.getCategoryId())
-                .categoryType(product.getCategoryType())
-                .createdAt(product.getCreatedAt())
-                .modifiedAt(product.getModifiedAt())
-                .userNickname(user.getNickname())
-                .userId(user.getUserId())
-                .build())
+        return products;
     }
 
     public ProductInfoResponse getProduct(Long categoryId) {

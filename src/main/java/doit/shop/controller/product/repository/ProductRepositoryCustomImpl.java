@@ -25,8 +25,23 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     @Override
     public Page<ProductInfoResponse> searchKeyword(Pageable pageable, String keyword) {
 
-        List<Product> products = queryFactory
-                .selectFrom(product)
+        List<ProductInfoResponse> products = queryFactory
+                .select(Projections.constructor(
+                        ProductInfoResponse.class,
+                        product.productId,
+                        product.name,
+                        product.description,
+                        product.price,
+                        product.stock,
+                        product.image,
+                        product.createdAt,
+                        product.modifiedAt,
+                        product.categoryId,
+                        category.categoryType,
+                        userEntity.userId,
+                        userEntity.nickname
+                ))
+                .from(product)
                 .where(product.description.contains(keyword))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -43,33 +58,30 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
 
     @Override
     public Page<ProductInfoResponse> searchKeywordByCategoryId(Pageable pageable, String keyword, Long categoryId) {
-        List<Product> products = queryFactory
-                .selectFrom(product)
+
+        List<ProductInfoResponse> products = queryFactory.select(Projections.constructor(
+                        ProductInfoResponse.class,
+                        product.productId,
+                        product.name,
+                        product.description,
+                        product.price,
+                        product.stock,
+                        product.image,
+                        product.createdAt,
+                        product.modifiedAt,
+                        product.categoryId,
+                        category.categoryType,
+                        userEntity.userId,
+                        userEntity.nickname
+                ))
+                .from(product)
+                .leftJoin(category).on(product.categoryId.eq(category.categoryId))
+                .leftJoin(userEntity).on(product.userId.eq(userEntity.userId))
                 .where(product.description.contains(keyword), product.categoryId.eq(categoryId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(product.modifiedAt.asc())
                 .fetch();
-
-        queryFactory.select(Projections.constructor(
-            ProductInfoResponse.class,
-            product.productId,
-            product.description,
-            product.name,
-            product.stock,
-            product.image,
-            product.price,
-            category.categoryId,
-            category.categoryType,
-            product.createdAt,
-            product.modifiedAt,
-            userEntity.nickname,
-            userEntity.userId
-        ))
-            .from(product)
-            .leftJoin(category).on(product.categoryId.eq(category.categoryId))
-            .leftJoin(userEntity).on(product.userId.eq(userEntity.userId))
-            .fetch();
 
         Long total = queryFactory.select(product.count())
                 .from(product)
