@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Tag(name = "User", description = "유저 관련 API")
 interface UserControllerDocs {
@@ -34,6 +35,7 @@ interface UserControllerDocs {
     UserLoginResponse login(
             @Schema(description = "로그인 정보", implementation = UserLoginRequest.class)
             UserLoginRequest userLoginRequest
+            , HttpServletResponse response
     );
 
     @Operation(summary = "유저 정보 조회", description = "유저 정보를 조회한다.")
