@@ -35,7 +35,6 @@ public class ProductController {
     public void deleteProduct(@PathVariable Long id, HttpServletRequest httpRequest){
         productService.delete(id, httpRequest);
     }
-
     @GetMapping
     public Page<ProductInfoResponse> getMultiProducts(Pageable pageable, @RequestParam String keyword, @RequestParam Long categoryId){
         return productService.getMultiProducts(pageable,keyword,categoryId);

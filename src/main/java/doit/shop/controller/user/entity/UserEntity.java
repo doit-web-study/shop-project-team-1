@@ -1,6 +1,7 @@
 package doit.shop.controller.user.entity;
 
 import doit.shop.controller.account.entity.AccountEntity;
+import doit.shop.controller.order.entity.Order;
 import doit.shop.controller.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -38,6 +39,9 @@ public class UserEntity implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Order> orders = new ArrayList<>();
 
     @Builder
     public UserEntity(Long userId, String name, String loginId, String password, String nickname, String phoneNumber, LocalDateTime createdAt) {

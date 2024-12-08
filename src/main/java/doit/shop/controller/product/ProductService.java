@@ -44,7 +44,6 @@ public class ProductService {
         String userLoginId = jwtProvider.getUserId(accessToken);
         UserEntity user = userRepository.findByLoginId(userLoginId);
 
-
         if(!jwtProvider.isValidToken(accessToken,userLoginId))
             throw new CustomException(ErrorCode.NO_TOKEN_EXIST);
 

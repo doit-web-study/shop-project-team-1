@@ -1,5 +1,6 @@
 package doit.shop.controller.product.entity;
 
+import doit.shop.controller.order.entity.Order;
 import doit.shop.controller.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -7,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +32,9 @@ public class Product {
     @ManyToOne
 //    @JoinColumn(name = "user_id", referencedColumnName = "userId", insertable = false, updatable = false)
     UserEntity user;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Order> orders = new ArrayList<>();
 
     @Builder
     public Product(String name, String description, String image, Integer price, Integer stock, Category category, UserEntity user) {
