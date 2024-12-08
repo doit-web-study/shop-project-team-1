@@ -52,7 +52,7 @@ public interface AccountControllerDocs {
             Long accountId,
             @Schema(description = "입금 금액", example = "10000")
             Integer amount
-    );
+    ) throws InterruptedException;
 
     @Operation(summary = "계좌에서 출금", description = "계좌에서 일정 금액을 출금한다.")
     @ApiResponse(responseCode = "200", description = "계좌 출금 성공")
