@@ -57,6 +57,39 @@ public class OrderService {
 
     }
 
+    public OrderProductResponse getOrder(Long orderId, UserEntity user){
+        Order order = orderRepository.findByOrderId(orderId);
+        Product product = productRepository.findByProductId(order.getProduct().getProductId());
+
+        OrderResponse orderResponse = OrderResponse.builder()
+                .orderId(order.getOrderId())
+                .orderCreatedAt(order.getCreatedAt())
+                .orderStatus(order.getOrderStatus())
+                .numberOfProduct(order.getOrderedStock())
+                .orderTotalPrice(order.getTotalPrice())
+                .build();
+
+        ProductInfoResponse productInfoResponse = ProductInfoResponse.builder()
+                .userId(user.getUserId())
+                .userNickname(user.getNickname())
+                .productId(product.getProductId())
+                .productName(product.getName())
+                .productStock(product.getStock())
+                .productPrice(product.getPrice())
+                .productDescription(product.getDescription())
+                .categoryId(product.getCategory().getCategoryId())
+                .createdAt(product.getCreatedAt())
+                .modifiedAt(product.getModifiedAt())
+                .productImage(product.getImage())
+                .categoryType(product.getCategory().getCategoryType())
+                .build();
+
+        return OrderProductResponse.builder()
+                .orderResponse(orderResponse)
+                .productInfoResponse(productInfoResponse)
+                .build();
+    }
+
     public ListWrapper<OrderProductResponse> getAllOrders(HttpServletRequest request) {
         String accessToken = jwtProvider.resolveToken(request);
         String userLoginId = jwtProvider.getUserId(accessToken);
@@ -68,48 +101,21 @@ public class OrderService {
         List<Order> orders = orderRepository.findAll();
         List<OrderProductResponse> orderProductResponses = orders.stream().map(o ->
         {
-            Order order = orderRepository.findByOrderId(o.getOrderId());
-            Product product = productRepository.findByProductId(order.getProduct().getProductId());
-
-            OrderResponse orderResponse = OrderResponse.builder()
-                    .orderId(order.getOrderId())
-                    .orderCreatedAt(order.getCreatedAt())
-                    .orderStatus(order.getOrderStatus())
-                    .numberOfProduct(order.getOrderedStock())
-                    .orderTotalPrice(order.getTotalPrice())
-                    .build();
-
-            ProductInfoResponse productInfoResponse = ProductInfoResponse.builder()
-                    .userId(user.getUserId())
-                    .userNickname(user.getNickname())
-                    .productId(product.getProductId())
-                    .productName(product.getName())
-                    .productStock(product.getStock())
-                    .productPrice(product.getPrice())
-                    .productDescription(product.getDescription())
-                    .categoryId(product.getCategory().getCategoryId())
-                    .createdAt(product.getCreatedAt())
-                    .modifiedAt(product.getModifiedAt())
-                    .productImage(product.getImage())
-                    .categoryType(product.getCategory().getCategoryType())
-                    .build();
-
-            return OrderProductResponse.builder()
-                    .orderResponse(orderResponse)
-                    .productInfoResponse(productInfoResponse)
-                    .build();
+            return getOrder(o.getOrderId(), user);
         }).collect(Collectors.toList());
 
         return new ListWrapper<>(orderProductResponses);
     }
 
-    public OrderProductResponse getOneOrders(Long id, HttpServletRequest request) {
+    public OrderProductResponse getOneOrders(Long orderId, HttpServletRequest request) {
         String accessToken = jwtProvider.resolveToken(request);
         String userLoginId = jwtProvider.getUserId(accessToken);
         UserEntity user = userRepository.findByLoginId(userLoginId);
 
         if(!jwtProvider.isValidToken(accessToken,userLoginId))
             throw new CustomException(ErrorCode.NO_TOKEN_EXIST);
+
+        return getOrder(orderId,user);
     }
 
     public void cancelOrders(Long id, HttpServletRequest request) {
