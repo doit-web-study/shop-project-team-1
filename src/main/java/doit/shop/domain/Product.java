@@ -40,4 +40,16 @@ public class Product extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    public Product withUpdatedStock(int newStock) {
+        return Product.builder()
+                .id(this.id) // 기존 ID 유지
+                .name(this.name)
+                .description(this.description)
+                .image(this.image)
+                .price(this.price)
+                .stock(newStock) // 업데이트된 재고
+                .category(this.category)
+                .build();
+    }
 }
