@@ -2,6 +2,7 @@ package doit.shop.controller.order;
 
 import doit.shop.common.jwt.JwtProvider;
 import doit.shop.controller.ListWrapper;
+import doit.shop.controller.account.AccountRepository;
 import doit.shop.controller.order.dto.OrderProductRequest;
 import doit.shop.controller.order.dto.OrderProductResponse;
 import doit.shop.controller.order.dto.OrderProductsRequest;
@@ -18,6 +19,7 @@ import doit.shop.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +31,9 @@ public class OrderService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
+    private final AccountRepository accountRepository;
 
+    @Transactional
     public void orderProducts(OrderProductsRequest request, HttpServletRequest httpRequest) {
         String accessToken = jwtProvider.resolveToken(httpRequest);
         String userLoginId = jwtProvider.getUserId(accessToken);
@@ -46,13 +50,15 @@ public class OrderService {
                 throw new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
             }
 
-            return Order.builder()
+            Order order = Order.builder()
                     .orderStatus(OrderStatus.ORDERED)
                     .orderedStock(result.getNumberOfProducts())
                     .totalPrice(result.getNumberOfProducts())
                     .user(user)
                     .product(product)
                     .build();
+
+            return orderRepository.save(order);
         });
 
     }
@@ -118,12 +124,15 @@ public class OrderService {
         return getOrder(orderId,user);
     }
 
-    public void cancelOrders(Long id, HttpServletRequest request) {
+    public void cancelOrders(Long OrderId, HttpServletRequest request) {
         String accessToken = jwtProvider.resolveToken(request);
         String userLoginId = jwtProvider.getUserId(accessToken);
-        UserEntity user = userRepository.findByLoginId(userLoginId);
 
         if(!jwtProvider.isValidToken(accessToken,userLoginId))
             throw new CustomException(ErrorCode.NO_TOKEN_EXIST);
+
+        Order order = orderRepository.findByOrderId(OrderId);
+        order.changeStatus(OrderStatus.CANCELED);
+        orderRepository.save(order);
     }
 }

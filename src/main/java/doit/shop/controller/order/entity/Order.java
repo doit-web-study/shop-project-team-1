@@ -36,4 +36,8 @@ public class Order {
         this.product = product;
         this.user = user;
     }
+
+    public void changeStatus(OrderStatus status){
+        this.orderStatus = status;
+    }
 }
