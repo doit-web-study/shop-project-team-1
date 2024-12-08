@@ -4,11 +4,13 @@ import doit.shop.controller.product.entity.Product;
 import doit.shop.controller.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class Order {
 
