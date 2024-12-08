@@ -16,41 +16,19 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-@Primary
 public class ProductJpaAdapter implements ProductPersistencePort {
     // Spring Data JPA를 사용하여 HQL 기반으로 쿼리를 작성
     private final ProductRepository productRepository;
 
     @Override
     public PagedProductResponse getPagedProducts(int pageNumber, String keyword, Long categoryId, String orderBy) {
-        // 정렬 기준 설정
-        Sort sort = "views".equalsIgnoreCase(orderBy)
-                ? Sort.by(Sort.Direction.DESC, "views")
-                : Sort.by(Sort.Direction.DESC, "createdAt");
+        PageRequest pageRequest = ProductAdapterUtil.createPageRequest(pageNumber, orderBy);
 
-        // 페이징 설정
-        PageRequest pageRequest = PageRequest.of(pageNumber, 10, sort);
-
-        // 검색 및 필터링
         Page<Product> productPage = categoryId != null
                 ? productRepository.findByCategoryIdAndKeyword(categoryId, keyword, pageRequest)
                 : productRepository.findByKeyword(keyword, pageRequest);
 
-        // DTO로 변환
-        List<ProductListResponse> products = productPage.stream()
-                .map(product -> new ProductListResponse(
-                        product.getId(),
-                        product.getName(),
-                        product.getDescription(),
-                        product.getPrice(),
-                        product.getStock(),
-                        product.getImage(),
-                        product.getCreatedAt(),
-                        product.getUpdatedAt(),
-                        product.getCategory().getId(),
-                        product.getCategory().getCategoryType().name()
-                ))
-                .collect(Collectors.toList());
+        List<ProductListResponse> products = ProductAdapterUtil.toProductListResponse(productPage.getContent());
 
         return new PagedProductResponse(
                 products,
@@ -58,5 +36,14 @@ public class ProductJpaAdapter implements ProductPersistencePort {
                 productPage.hasPrevious(),
                 productPage.hasNext()
         );
+    }
+
+    @Override
+    public List<ProductListResponse> getAllProducts(String keyword, Long categoryId) {
+        List<Product> products = (categoryId != null)
+                ? productRepository.findAllByCategoryIdAndKeyword(categoryId, keyword)
+                : productRepository.findAllByKeyword(keyword);
+
+        return ProductAdapterUtil.toProductListResponse(products);
     }
 }

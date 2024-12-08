@@ -7,6 +7,17 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
+@Table(
+        name = "product",
+        indexes = {
+                // 단일 인덱스 (필터링)
+                @Index(name = "idx_product_name", columnList = "name"),
+                @Index(name = "idx_product_category_id", columnList = "category_id"),
+                // 복합 인덱스 (조건 쿼리)
+                @Index(name = "idx_product_category_name", columnList = "category_id, name"),
+                @Index(name = "idx_product_category_created_at", columnList = "category_id, created_at")
+        }
+)
 @AllArgsConstructor
 public class Product extends BaseEntity {
     @Id

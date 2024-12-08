@@ -1,7 +1,6 @@
 package doit.shop.service;
 
 import doit.shop.controller.product.dto.PagedProductResponse;
-import doit.shop.controller.product.dto.ProductListResponse;
 import doit.shop.controller.product.dto.ProductRequest;
 import doit.shop.controller.product.dto.ProductResponse;
 import doit.shop.domain.Category;
