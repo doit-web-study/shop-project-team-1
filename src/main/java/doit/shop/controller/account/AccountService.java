@@ -11,6 +11,7 @@ import doit.shop.controller.user.UserRepository;
 import doit.shop.controller.user.entity.UserEntity;
 import doit.shop.exception.CustomException;
 import doit.shop.exception.ErrorCode;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,9 +44,18 @@ public class AccountService {
         accountRepository.save(account);
         return new AccountIdResponse(account.getAccountId());
     }
-    public ListWrapper<AccountInfoResponse> getAccountList() {
-        List<AccountEntity> all = accountRepository.findAll();
-        List<AccountInfoResponse> responses = all.stream().map(a ->
+
+    public ListWrapper<AccountInfoResponse> getAccountList(HttpServletRequest httpRequest) {
+
+        String accessToken = jwtProvider.resolveToken(httpRequest);
+        String userLoginId = jwtProvider.getUserId(accessToken);
+        UserEntity user = userRepository.findByLoginId(userLoginId);
+
+        if(!jwtProvider.isValidToken(accessToken,userLoginId))
+            throw new CustomException(ErrorCode.NO_TOKEN_EXIST);
+
+        List<AccountEntity> accounts = accountRepository.findAllByUser(user);
+        List<AccountInfoResponse> responses = accounts.stream().map(a ->
             new AccountInfoResponse(a.getAccountId(), a.getAccountName(), a.getAccountNumber(), a.getAccountBankName(), a.getAccountBalance())
         ).collect(Collectors.toList());
 

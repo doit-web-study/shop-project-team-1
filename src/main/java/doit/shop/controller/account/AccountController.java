@@ -5,6 +5,7 @@ import doit.shop.controller.account.dto.AccountIdResponse;
 import doit.shop.controller.account.dto.AccountInfoResponse;
 import doit.shop.controller.account.dto.AccountRegisterRequest;
 import doit.shop.controller.account.dto.AccountUpdateRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,9 +30,9 @@ public class AccountController implements AccountControllerDocs {
     }
 
     @GetMapping
-    public ListWrapper<AccountInfoResponse> getAccountList() {
+    public ListWrapper<AccountInfoResponse> getAccountList(HttpServletRequest httpRequest) {
 
-        return accountService.getAccountList();
+        return accountService.getAccountList(httpRequest);
     }
 
     @GetMapping("/{accountId}")
