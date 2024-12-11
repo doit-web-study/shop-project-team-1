@@ -1,38 +1,52 @@
 package doit.shop.controller.user;
 
-import doit.shop.controller.user.dto.UserInfoResponse;
-import doit.shop.controller.user.dto.UserLoginRequest;
-import doit.shop.controller.user.dto.UserLoginResponse;
-import doit.shop.controller.user.dto.UserSignUpRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import doit.shop.controller.user.dto.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
+@ResponseBody
 public class UserController implements UserControllerDocs {
+
+    private final UserService userService;
 
     @PostMapping("/validate")
     public void checkDuplicateId(@RequestParam String id) {
 
+        userService.checkDuplicateId(id);
     }
 
     @PostMapping("/signup")
-    public void signUp(@RequestBody UserSignUpRequest userSignUpRequest) {
-
+    public void signUp(@Valid @RequestBody UserSignUpRequest userSignUpRequest) {
+        userService.signUp(userSignUpRequest);
     }
 
+
     @PostMapping("/login")
-    public UserLoginResponse login(@RequestBody UserLoginRequest userLoginRequest) {
-        return null;
+    public UserLoginResponse login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response) {
+
+        return userService.login(userLoginRequest, response);
     }
 
     @GetMapping("/{userId}")
     public UserInfoResponse getUserInfo(@PathVariable Long userId) {
-        return null;
+
+        return userService.getUserInfo(userId);
+    }
+
+    @PutMapping("/info")
+    public void modifyInfo(@RequestBody UserModifyRequest userModifyRequest, HttpServletRequest request){
+        userService.modifyInfo(userModifyRequest, request);
+    }
+
+    @DeleteMapping("/info")
+    public void deleteUser(HttpServletRequest request){
+        userService.deleteUser(request);
     }
 }
