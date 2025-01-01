@@ -11,3 +11,6 @@
 - Spring Boot 3.3.4
 - Spring Data JPA
 - Springdoc OpenAPI  2.0.2
+
+### 방명록
+찬주 왔다감
