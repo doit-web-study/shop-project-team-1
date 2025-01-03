@@ -1,19 +1,28 @@
 spring:
+
+  h2:
+    console:
+      enabled: true
+
   datasource:
     url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
-    username: doit
+    username: sa
     password:
+    url=jdbc:h2:mem:testdb;MODE=MYSQL:
+
   jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: update # 애플리케이션 시작 시 DB 스키마 자동 생성
-    show-sql: true # 실행되는 SQL 로그 출력
-  h2:
-    console:
-      enabled: true # H2 콘솔 활성화
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
 
-  application:
-    name: shop
+  sql:
+    init:
+      mode=never:logging:
+  level:
+    doti.shop: DEBUG
 
-server :
-  port: 8080

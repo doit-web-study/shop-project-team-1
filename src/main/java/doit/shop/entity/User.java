@@ -1,29 +1,46 @@
-package doit.shop.entity;
-
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-/**
- * 회원 정보를 저장할 엔티티
- */
-
-@Entity // database table과 매핑
-@Table(name = "users")
-@Getter @Setter @NoArgsConstructor
-public class User {
-
-    @Id // basic key
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동증가
-    private Long id;
-
-    @Column(nullable = false, unique = true) // 중복 허용 x
-    private String username;
-
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false, unique = true) // 중복 허용 x
-    private String email;
-}
+//package doit.shop.entity;
+//
+//import com.fasterxml.jackson.annotation.JsonIgnore;
+//import doit.shop.entity.Authority;
+//import jakarta.persistence.*;
+//import lombok.*;
+//import org.springframework.data.annotation.Id;
+//
+//import java.util.Set;
+//
+//@Entity
+//@Table(name = "USERS")
+//@Getter
+//@Setter
+//@Builder
+//@AllArgsConstructor
+//@NoArgsConstructor
+//public class User {
+//
+//    @JsonIgnore
+//    @Id
+//    @Column(name = "user_id")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long userId;
+//
+//    @Column(name = "username", length = 50, unique = true)
+//    private String username;
+//
+//    @JsonIgnore
+//    @Column(name = "password", length = 100)
+//    private String password;
+//
+//    @Column(name = "nickname", length = 50)
+//    private String nickname;
+//
+//    @JsonIgnore
+//    @Column(name = "activated")
+//    private boolean activated;
+//
+//    @ManyToMany
+//    @JoinTable(
+//            name = "user_authority",
+//            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+//    private Set<Authority> authorities;
+//}

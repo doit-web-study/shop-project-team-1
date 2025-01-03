@@ -4,6 +4,7 @@ import doit.shop.controller.user.dto.UserInfoResponse;
 import doit.shop.controller.user.dto.UserLoginRequest;
 import doit.shop.controller.user.dto.UserLoginResponse;
 import doit.shop.controller.user.dto.UserSignUpRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,5 +35,10 @@ public class UserController implements UserControllerDocs {
     @GetMapping("/{userId}")
     public UserInfoResponse getUserInfo(@PathVariable Long userId) {
         return null;
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getUserProfile() {
+        return ResponseEntity.ok("This is a protected API!");
     }
 }
